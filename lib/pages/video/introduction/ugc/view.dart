@@ -13,6 +13,7 @@ import 'package:PiliPlus/common/widgets/selection_text.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/common/widgets/translucent_column.dart';
 import 'package:PiliPlus/http/sponsor_block.dart';
+import 'package:PiliPlus/models/common/stat_type.dart' show StatType;
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
 import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/models_new/video/video_detail/desc_v2.dart';
@@ -990,19 +991,19 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
             color: colorScheme.outline,
           ),
         ),
+        if (introController.isShowOnlineTotal)
+          Obx(
+            () => StatWidget(
+              type: StatType.watching,
+              value: '${introController.total.value}人正在看',
+            ),
+          ),
         if (MineController.anonymity.value)
           Icon(
             MdiIcons.incognito,
             size: 15,
             color: colorScheme.outline,
             semanticLabel: '无痕',
-          ),
-        if (introController.isShowOnlineTotal)
-          Obx(
-            () => Text(
-              '${introController.total.value}人在看',
-              style: TextStyle(fontSize: 12, color: colorScheme.outline),
-            ),
           ),
       ],
     );
