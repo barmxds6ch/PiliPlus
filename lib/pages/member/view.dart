@@ -252,7 +252,7 @@ class _MemberPageState extends State<MemberPage> {
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(FontAwesomeIcons.b, size: 16),
+                  Icon(FontAwesomeIcons.coins, size: 16),
                   SizedBox(width: 10),
                   Text('硬币记录'),
                 ],
