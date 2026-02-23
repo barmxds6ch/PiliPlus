@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:PiliPlus/common/assets.dart';
 import 'package:PiliPlus/common/style.dart';
@@ -393,7 +394,10 @@ class _MediaPageState extends CommonPageState<MinePage>
                         child: LinearProgressIndicator(
                           minHeight: 2.25,
                           value: hasLevel
-                              ? levelInfo.currentExp! / levelInfo.nextExp!
+                              ? min(
+                                  levelInfo.currentExp! / levelInfo.nextExp!,
+                                  1.0,
+                                )
                               : 0,
                           backgroundColor: theme.colorScheme.outline.withValues(
                             alpha: 0.4,
