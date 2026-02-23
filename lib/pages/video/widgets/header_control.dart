@@ -2219,7 +2219,7 @@ class HeaderControlState extends State<HeaderControl>
                         FontAwesomeIcons.b,
                         color: Colors.white,
                       ),
-                      selectIcon: const Icon(FontAwesomeIcons.b),
+                      selectIcon: const Icon(FontAwesomeIcons.coins),
                       onTap: introController.actionCoinVideo,
                       selectStatus: introController.hasCoin,
                       semanticsLabel: '投币',
