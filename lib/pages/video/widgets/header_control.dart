@@ -2139,10 +2139,10 @@ class HeaderControlState extends State<HeaderControl>
                       expand: false,
                       animation: introController.tripleAnimation,
                       icon: const Icon(
-                        FontAwesomeIcons.b,
+                        FontAwesomeIcons.coins,
                         color: Colors.white,
                       ),
-                      selectIcon: const Icon(FontAwesomeIcons.b),
+                      selectIcon: const Icon(FontAwesomeIcons.coins),
                       onTap: introController.actionCoinVideo,
                       selectStatus: introController.hasCoin,
                       semanticsLabel: '投币',

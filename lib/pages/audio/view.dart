@@ -664,8 +664,8 @@ class _AudioPageState extends State<AudioPage> {
           Obx(
             () => ActionItem(
               animation: _controller.tripleAnimation,
-              icon: const Icon(FontAwesomeIcons.b),
-              selectIcon: const Icon(FontAwesomeIcons.b),
+              icon: const Icon(FontAwesomeIcons.coins),
+              selectIcon: const Icon(FontAwesomeIcons.coins),
               onTap: _controller.actionCoinVideo,
               selectStatus: _controller.hasCoin,
               semanticsLabel: '投币',

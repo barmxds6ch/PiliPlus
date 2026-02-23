@@ -567,8 +567,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
           Obx(
             () => ActionItem(
               animation: introController.tripleAnimation,
-              icon: const Icon(FontAwesomeIcons.b),
-              selectIcon: const Icon(FontAwesomeIcons.b),
+              icon: const Icon(FontAwesomeIcons.coins),
+              selectIcon: const Icon(FontAwesomeIcons.coins),
               onTap: introController.actionCoinVideo,
               selectStatus: introController.hasCoin,
               semanticsLabel: '投币',
