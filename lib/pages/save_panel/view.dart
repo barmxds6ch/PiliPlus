@@ -13,7 +13,6 @@ import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/extension/context_ext.dart';
-import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
@@ -504,15 +503,6 @@ class _SavePanelState extends State<SavePanel> {
                                       ],
                                     ),
                                   ),
-                                Align(
-                                  alignment: .centerLeft,
-                                  child: Image.asset(
-                                    'assets/images/logo/logo_2.png',
-                                    width: 100,
-                                    cacheWidth: 100.cacheSize(context),
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
                               ],
                             )
                           : const SizedBox(height: 12),
