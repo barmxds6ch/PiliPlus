@@ -1443,12 +1443,29 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         borderRadius: BorderRadius.all(Radius.circular(16)),
                       ),
                       child: Obx(
-                        () => Text(
-                          '${plPlayerController.enableAutoLongPressSpeed ? (plPlayerController.longPressStatus.value ? plPlayerController.lastPlaybackSpeed : plPlayerController.playbackSpeed) * 2 : plPlayerController.longPressSpeed}倍速中',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          ),
+                        () => Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ...List.generate(
+                              3,
+                              (_) => const SizedBox(
+                                width: 8,
+                                child: Icon(
+                                  Icons.play_arrow_rounded,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '${plPlayerController.enableAutoLongPressSpeed ? (plPlayerController.longPressStatus.value ? plPlayerController.lastPlaybackSpeed : plPlayerController.playbackSpeed) * 2 : plPlayerController.longPressSpeed}倍速中',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
