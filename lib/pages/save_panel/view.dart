@@ -509,16 +509,6 @@ class _SavePanelState extends State<SavePanel> {
                                           ],
                                         ),
                                       ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Image.asset(
-                                        'assets/images/logo/logo_2.png',
-                                        width: 100,
-                                        cacheWidth: 100.cacheSize(context),
-                                        color:
-                                            theme.colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
                                   ],
                                 )
                               : const SizedBox(height: 12),
