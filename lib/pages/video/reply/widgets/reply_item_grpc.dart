@@ -369,15 +369,34 @@ class ReplyItemGrpc extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 2),
-        if (replyItem.replyControl.cardLabels.isNotEmpty) ...[
-          Text(
-            replyItem.replyControl.cardLabels
-                .map((e) => e.textContent)
-                .join('  '),
-            style: textStyle.copyWith(color: theme.colorScheme.secondary),
+        if (replyItem.replyControl.cardLabels.isNotEmpty)
+          Row(
+            children: [
+              ...[
+                ...replyItem.replyControl.cardLabels.map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2,
+                        horizontal: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        e.textContent,
+                        style: textStyle.copyWith(
+                          color: theme.colorScheme.outline,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
-          const SizedBox(width: 2),
-        ],
         if (replyLevel == 2 && needDivider && replyItem.id != replyItem.dialog)
           SizedBox(
             height: 32,
