@@ -60,6 +60,7 @@ import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:collection/collection.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -1874,6 +1875,22 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         ),
                       ),
                       const Spacer(),
+                      Obx(() {
+                        String posText = '-/-';
+                        try {
+                          videoDetailController.cid.value;
+                          posText =
+                              '${videoDetailController.mediaList.firstWhereOrNull((item) => item.aid == videoDetailController.aid)?.index + 1}/${videoDetailController.args['count']}';
+                        } catch (_) {}
+                        return Text(
+                          posText,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }),
                       const Icon(Icons.keyboard_arrow_up_rounded, size: 26),
                     ],
                   ),
