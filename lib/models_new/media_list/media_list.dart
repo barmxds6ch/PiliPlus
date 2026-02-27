@@ -6,6 +6,7 @@ import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 class MediaListItemModel extends BaseEpisodeItem {
   @override
   int? get id => aid;
+  int? index;
   String? intro;
   CntInfo? cntInfo;
   int? duration;
@@ -17,6 +18,7 @@ class MediaListItemModel extends BaseEpisodeItem {
 
   MediaListItemModel({
     super.aid,
+    this.index,
     this.intro,
     this.cntInfo,
     super.cover,
@@ -32,6 +34,7 @@ class MediaListItemModel extends BaseEpisodeItem {
 
   MediaListItemModel.fromJson(Map<String, dynamic> json) {
     aid = json['id'] as int?;
+    index = json['index'] as int?;
     intro = json['intro'] as String?;
     cntInfo = json['cnt_info'] == null
         ? null
