@@ -476,13 +476,13 @@ class ChatItem extends StatelessWidget {
                       margin: const .fromLTRB(12, 0, 12, 8),
                       padding: const .symmetric(horizontal: 11, vertical: 3.5),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
+                        color: theme.colorScheme.surface.withValues(alpha: 0.5),
                         borderRadius: const .all(.circular(6)),
                       ),
                       child: msgTypeText_1(
                         theme,
                         content: content['attach_msg'],
-                        textColor: textColor,
+                        textColor: textColor.withValues(alpha: 0.8),
                       ),
                     ),
                 ],
