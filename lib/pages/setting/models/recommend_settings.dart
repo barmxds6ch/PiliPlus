@@ -25,7 +25,7 @@ List<SettingsModel> get recommendSettings => [
     onChanged: (value) {
       try {
         Get.find<RcmdController>()
-          ..enableSaveLastData = value
+          ..enableSaveLastData.value = value
           ..lastRefreshAt = null;
       } catch (e) {
         if (kDebugMode) debugPrint('$e');
