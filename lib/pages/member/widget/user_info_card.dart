@@ -4,6 +4,8 @@ import 'package:PiliPlus/common/widgets/image_viewer/hero.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/view_safe_area.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/member/user_info_type.dart';
 import 'package:PiliPlus/models_new/space/space/card.dart';
@@ -29,6 +31,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class UserInfoCard extends StatelessWidget {
   const UserInfoCard({
@@ -247,40 +250,74 @@ class UserInfoCard extends StatelessWidget {
     ],
     Padding(
       padding: const EdgeInsets.only(left: 20, top: 6, right: 20),
-      child: Wrap(
-        spacing: 10,
-        runSpacing: 8,
-        crossAxisAlignment: WrapCrossAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () => Utils.copyText(card.mid.toString()),
-            child: Text(
-              'UID: ${card.mid}',
-              style: TextStyle(
-                fontSize: 12,
-                color: colorScheme.outline,
-              ),
-            ),
-          ),
-          ...?card.spaceTag?.map(
-            (item) {
-              final hasUri = item.uri?.isNotEmpty == true;
-              final child = Text(
-                item.title ?? '',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: hasUri ? colorScheme.secondary : colorScheme.outline,
+          Wrap(
+            spacing: 10,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () => Utils.copyText(card.mid.toString()),
+                child: Text(
+                  'UID: ${card.mid}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: colorScheme.outline,
+                  ),
                 ),
-              );
-              if (hasUri) {
-                return GestureDetector(
-                  onTap: () => PiliScheme.routePushFromUrl(item.uri!),
-                  child: child,
-                );
-              }
-              return child;
-            },
+              ),
+              ...?card.spaceTag?.map(
+                (item) {
+                  final hasUri = item.uri?.isNotEmpty == true;
+                  final child = Text(
+                    item.title ?? '',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: hasUri
+                          ? colorScheme.secondary
+                          : colorScheme.outline,
+                    ),
+                  );
+                  if (hasUri) {
+                    return GestureDetector(
+                      onTap: () => PiliScheme.routePushFromUrl(item.uri!),
+                      child: child,
+                    );
+                  }
+                  return child;
+                },
+              ),
+            ],
           ),
+          if (relation != 0 && relation != 128)
+            FutureBuilder<String>(
+              future: () async {
+                if (await UserHttp.hasFollow(int.parse(card.mid!)) case Success(
+                  :final response,
+                )) {
+                  final mtime = response['mtime'];
+                  if (mtime is int && mtime > 0) {
+                    return DateFormat(
+                      'yyyy-MM-dd HH:mm:ss',
+                    ).format(
+                      DateTime.fromMillisecondsSinceEpoch(mtime * 1000),
+                    );
+                  }
+                }
+                return '无法获取';
+              }(),
+              builder: (context, snapshot) {
+                return Text(
+                  '关注时间: ${snapshot.data}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: colorScheme.outline,
+                  ),
+                );
+              },
+            ),
         ],
       ),
     ),
