@@ -246,6 +246,8 @@ class CustomPopupMenuItem<T> extends PopupMenuEntry<T> {
     this.textStyle,
     this.mouseCursor,
     this.onTap,
+    this.onLongPress,
+    this.onSecondaryTap,
     this.outerPadding,
     this.stateLayerColor,
     required this.child,
@@ -271,6 +273,10 @@ class CustomPopupMenuItem<T> extends PopupMenuEntry<T> {
   final MouseCursor? mouseCursor;
 
   final VoidCallback? onTap;
+
+  final VoidCallback? onLongPress;
+
+  final VoidCallback? onSecondaryTap;
 
   final EdgeInsetsGeometry? outerPadding;
 
@@ -324,6 +330,18 @@ class CustomPopupMenuItemState<T> extends State<CustomPopupMenuItem<T>> {
             Navigator.pop<T>(context, widget.value);
             widget.onTap?.call();
           };
+    final onLongPress = !widget.enabled || widget.onLongPress == null
+        ? null
+        : () {
+            Navigator.pop<T>(context, null);
+            widget.onLongPress?.call();
+          };
+    final onSecondaryTap = !widget.enabled || widget.onSecondaryTap == null
+        ? null
+        : () {
+            Navigator.pop<T>(context, null);
+            widget.onSecondaryTap?.call();
+          };
     final borderRadius = widget.borderRadius ??
         (widget.selected ? _kMd3eMenuItemSelectedRadius : _kMd3eMenuItemRadius);
 
@@ -338,6 +356,8 @@ class CustomPopupMenuItemState<T> extends State<CustomPopupMenuItem<T>> {
           borderRadius: borderRadius,
           child: InkWell(
             onTap: onTap,
+            onLongPress: onLongPress,
+            onSecondaryTap: onSecondaryTap,
             borderRadius: borderRadius,
             mouseCursor: widget.mouseCursor,
             highlightColor: stateLayerColor.withValues(alpha: 0.1),

@@ -6,11 +6,14 @@ import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
+import 'package:PiliPlus/pages/login/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/video/ai_conclusion/view.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:PiliPlus/utils/feed_back.dart' show feedBack;
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/platform_utils.dart' show PlatformUtils;
 import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -26,7 +29,13 @@ class _VideoCustomAction {
   final String title;
   final Widget icon;
   final VoidCallback onTap;
-  const _VideoCustomAction(this.title, this.icon, this.onTap);
+  final VoidCallback? onLongPress;
+  const _VideoCustomAction(
+    this.title,
+    this.icon,
+    this.onTap, {
+    this.onLongPress,
+  });
 }
 
 class _DialogChipAction {
@@ -513,6 +522,10 @@ class VideoPopupMenu extends StatelessWidget {
             ? const Icon(MdiIcons.incognitoOff, size: 16)
             : const Icon(MdiIcons.incognito, size: 16),
         MineController.onChangeAnonymity,
+        onLongPress: () {
+          feedBack();
+          LoginPageController.switchAccountDialog(context);
+        },
       ),
     ];
   }
@@ -526,6 +539,10 @@ class VideoPopupMenu extends StatelessWidget {
           CustomPopupMenuItem<int>(
             value: i,
             height: menuItemHeight,
+            onLongPress: actions[i].onLongPress,
+            onSecondaryTap: PlatformUtils.isMobile
+                ? null
+                : actions[i].onLongPress,
             child: Row(
               children: [
                 actions[i].icon,
