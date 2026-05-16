@@ -13,6 +13,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/feed_back.dart' show feedBack;
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart' show PlatformUtils;
 import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -271,6 +272,11 @@ class VideoPopupMenu extends StatelessWidget {
           videoItem.bvid!,
           const Icon(CustomIcons.identifier_circle, size: 16),
           () => Utils.copyText(videoItem.bvid!),
+        ),
+        _VideoCustomAction(
+          'av${IdUtils.bv2av(videoItem.bvid!)}',
+          const Icon(CustomIcons.identifier_circle, size: 16),
+          () => Utils.copyText('av${IdUtils.bv2av(videoItem.bvid!)}'),
         ),
         if (Accounts.main.isLogin)
           _VideoCustomAction(
@@ -553,7 +559,7 @@ class VideoPopupMenu extends StatelessWidget {
           ),
       ],
     ).then((index) {
-      if (index != null && context.mounted) {
+      if (index != null && index >= 0 && context.mounted) {
         actions[index].onTap();
       }
     });

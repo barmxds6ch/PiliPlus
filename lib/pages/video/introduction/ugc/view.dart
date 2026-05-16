@@ -279,8 +279,10 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
     );
   }
 
+
   List<Widget> _infos(VideoDetailData videoDetail) => [
     const SizedBox(height: 8, width: .infinity),
+
     GestureDetector(
       onTap: () => Utils.copyText('${videoDetail.bvid}'),
       child: Text(
@@ -288,6 +290,19 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
         style: TextStyle(fontSize: 14, color: colorScheme.secondary),
       ),
     ),
+
+    if (videoDetail.aid != null)
+      GestureDetector(
+        onTap: () => Utils.copyText('av${videoDetail.aid}'),
+        child: Text(
+          'av${videoDetail.aid}',
+          style: TextStyle(
+            fontSize: 14,
+            color: colorScheme.secondary,
+          ),
+        ),
+      ),
+
     if (videoDetail.descV2 case final descV2? when descV2.isNotEmpty) ...[
       const SizedBox(height: 8),
       SelectionText.rich(
@@ -295,6 +310,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
         style: const TextStyle(height: 1.4),
       ),
     ],
+
     NoTranslucentArea(
       child: Obx(() {
         final videoTags = introController.videoTags.value;

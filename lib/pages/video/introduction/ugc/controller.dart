@@ -15,6 +15,7 @@ import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models_new/member_card_info/data.dart';
 import 'package:PiliPlus/models_new/relation/data.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
+import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/models_new/video/video_detail/dimension.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
@@ -38,6 +39,7 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart' show PlatformUtils;
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/share_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -286,40 +288,67 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
   // 分享视频
   @override
   void actionShareVideo(BuildContext context) {
+    Widget buildTitle(String label, VoidCallback onTap, {Widget? trailing}) {
+      return ListTile(
+        dense: true,
+        title: Text(label, style: const TextStyle(fontSize: 14)),
+        onTap: () {
+          Get.back();
+          onTap();
+        },
+        trailing: trailing,
+      );
+    }
+
+    Widget buildCopyTitle(String idType, String playedTimePos, String url) {
+      return buildTitle(
+        '复制 $idType 链接',
+        () => Utils.copyText(url),
+        trailing: playedTimePos.isNotEmpty
+            ? iconButton(
+                tooltip: '精确分享',
+                icon: const Icon(Icons.timer_outlined),
+                onPressed: () {
+                  Get.back();
+                  Utils.copyText('$url$playedTimePos');
+                },
+              )
+            : null,
+      );
+    }
+
+    Widget buildShareTitle(
+      String idType,
+      VideoDetailData videoDetail,
+      String url,
+    ) {
+      return buildTitle(
+        '分享视频 ($idType)',
+        () => ShareUtils.shareText(
+          '${videoDetail.title} '
+          'UP主: ${videoDetail.owner!.name!}'
+          ' - $url',
+        ),
+      );
+    }
+
     final videoDetail = this.videoDetail.value;
     final cid = this.cid.value;
     final partIndex = videoDetail.pages?.indexWhere((e) => e.cid == cid);
     final addIndex = partIndex != null && partIndex > 0;
+    final partSuffix = addIndex ? '?p=${partIndex + 1}' : '';
     final playedTimePos = videoDetailCtr.playedTimePos(addIndex);
-    final videoUrl =
-        '${HttpString.baseUrl}/video/$bvid/${addIndex ? '?p=${partIndex + 1}' : ''}';
+    final videoBvUrl = '${HttpString.baseUrl}/video/$bvid$partSuffix';
+    final videoAvUrl =
+        '${HttpString.baseUrl}/video/av${getFavRidType.$1}$partSuffix';
     showDialog(
       context: context,
       builder: (_) => SimpleDialog(
         clipBehavior: Clip.hardEdge,
         contentPadding: const EdgeInsets.symmetric(vertical: 12),
         children: [
-          ListTile(
-            dense: true,
-            title: const Text(
-              '复制链接',
-              style: TextStyle(fontSize: 14),
-            ),
-            onTap: () {
-              Get.back();
-              Utils.copyText(videoUrl);
-            },
-            trailing: playedTimePos.isNotEmpty
-                ? iconButton(
-                    tooltip: '精确分享',
-                    icon: const Icon(Icons.timer_outlined),
-                    onPressed: () {
-                      Get.back();
-                      Utils.copyText('$videoUrl$playedTimePos');
-                    },
-                  )
-                : null,
-          ),
+          buildCopyTitle('BV', playedTimePos, videoBvUrl),
+          buildCopyTitle('AV', playedTimePos, videoAvUrl),
           ListTile(
             dense: true,
             title: const Text(
@@ -328,24 +357,13 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
             ),
             onTap: () {
               Get.back();
-              PiliAndroidHelper.openUrl(videoUrl);
+              PiliAndroidHelper.openUrl(videoBvUrl);
             },
           ),
-          ListTile(
-            dense: true,
-            title: const Text(
-              '分享视频',
-              style: TextStyle(fontSize: 14),
-            ),
-            onTap: () {
-              Get.back();
-              ShareUtils.shareText(
-                '${videoDetail.title} '
-                'UP主: ${videoDetail.owner!.name!}'
-                ' - $videoUrl',
-              );
-            },
-          ),
+          if (PlatformUtils.isMobile) ...[
+            buildShareTitle('BV', videoDetail, videoBvUrl),
+            buildShareTitle('AV', videoDetail, videoAvUrl),
+          ],
           if (isLogin)
             ListTile(
               dense: true,
