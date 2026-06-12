@@ -12,4 +12,15 @@ abstract final class ConnectivityUtils {
       return true;
     }
   }
+
+  static Future<bool> get isMobile async {
+    try {
+      return PlatformUtils.isMobile &&
+          (await Connectivity().checkConnectivity()).contains(
+            ConnectivityResult.mobile,
+          );
+    } catch (_) {
+      return true;
+    }
+  }
 }

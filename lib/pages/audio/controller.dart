@@ -214,6 +214,14 @@ class AudioController extends GetxController
         ..onPause = onPause
         ..isPlaying = isPlaying;
     }
+
+    unawaited(_checkMobileDataAndWarn());
+  }
+
+  Future<void> _checkMobileDataAndWarn() async {
+    if (await ConnectivityUtils.isMobile) {
+      SmartDialog.showToast('移动网络播放中，请注意流量消耗');
+    }
   }
 
   bool isPlaying() {

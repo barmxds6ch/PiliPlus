@@ -522,10 +522,17 @@ class VideoDetailController extends GetxController
       vsync: this,
       initialIndex: Pref.defaultShowComment ? 1 : 0,
     );
+    unawaited(_checkMobileDataAndWarn());
 
     // 进入全屏时切换到全屏默认画质
     if (PlatformUtils.isMobile) {
       setupFullScreenQualitySwitch();
+    }
+  }
+
+  Future<void> _checkMobileDataAndWarn() async {
+    if (await ConnectivityUtils.isMobile) {
+      SmartDialog.showToast('移动网络播放中，请注意流量消耗');
     }
   }
 
