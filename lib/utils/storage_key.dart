@@ -243,6 +243,7 @@ abstract final class SettingBoxKey {
 
   static const String enableSponsorBlock = 'enableSponsorBlock',
       blockSettings = 'blockSettings',
+      blockWhitelist = 'blockWhitelist',
       blockLimit = 'blockLimit',
       blockColor = 'blockColor',
       blockUserID = 'blockUserID',

@@ -635,6 +635,42 @@ class HeaderControlState extends State<HeaderControl>
                       }
                     },
                   ),
+                if (videoDetailCtr.isUgc && videoDetailCtr.ownerMid != null)
+                  ListTile(
+                    dense: true,
+                    title: Text(
+                      '${Pref.blockWhitelist.keys.contains(videoDetailCtr.ownerMid) ? '' : '不'}跳过此UP主',
+                      style: titleStyle,
+                    ),
+                    leading: const Icon(
+                      Icons.person_add_alt_1_outlined,
+                      size: 20,
+                    ),
+                    onTap: () {
+                      Get.back();
+                      final currentMap = Map<int, String>.from(
+                        Pref.blockWhitelist,
+                      );
+                      final ownerMid = videoDetailCtr.ownerMid;
+                      final ownerName = videoDetailCtr.ownerName;
+                      final isWhitelisted =
+                          ownerMid != null &&
+                          currentMap.keys.contains(ownerMid);
+                      if (ownerMid != null) {
+                        if (isWhitelisted) {
+                          currentMap.remove(ownerMid);
+                        } else {
+                          currentMap[ownerMid] =
+                              ownerName ?? ownerMid.toString();
+                        }
+                        Pref.blockWhitelist = currentMap;
+                        videoDetailCtr.applyWhitelistToSegments();
+                        SmartDialog.showToast(
+                          '已将UP主${isWhitelisted ? '移出' : '加入'}豁免列表',
+                        );
+                      }
+                    },
+                  ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),

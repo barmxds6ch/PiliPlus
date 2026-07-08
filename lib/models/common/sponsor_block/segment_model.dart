@@ -10,11 +10,13 @@ class SegmentModel implements Comparable<SegmentModel> {
     required this.segmentType,
     required this.segment,
     required this.skipType,
+    required this.originalSkipType,
   });
   final String uuid;
   final SegmentType segmentType;
   final (int, int) segment;
-  final SkipType skipType;
+  SkipType skipType;
+  final SkipType originalSkipType;
   bool hasSkipped = false;
 
   factory SegmentModel.fromItemModel(
@@ -40,7 +42,12 @@ class SegmentModel implements Comparable<SegmentModel> {
       segmentType: segmentType,
       segment: segment,
       skipType: skipType,
+      originalSkipType: skipType,
     );
+  }
+
+  void applyWhitelistState(bool isWhitelisted) {
+    skipType = isWhitelisted ? SkipType.showOnly : originalSkipType;
   }
 
   @override

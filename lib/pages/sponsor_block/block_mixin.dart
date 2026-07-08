@@ -58,6 +58,8 @@ mixin BlockMixin on GetxController {
   int get currPosInMilliseconds;
   bool get isFullScreen => false;
 
+  int? get ownerMid => null;
+
   bool get isUgc;
   late final isBlock = isUgc || !blockConfig.enablePgcSkip;
 
@@ -65,6 +67,7 @@ mixin BlockMixin on GetxController {
     required String bvid,
     required int cid,
   }) async {
+    applyWhitelistToSegments();
     resetBlock();
 
     final result = await SponsorBlock.getSkipSegments(bvid: bvid, cid: cid);
@@ -127,6 +130,10 @@ mixin BlockMixin on GetxController {
     bool? isBlockSource,
   }) async {
     if (list.isNotEmpty) {
+      final currentOwnerMid = ownerMid;
+      final isWhitelisted =
+          currentOwnerMid != null &&
+          Pref.blockWhitelist.keys.contains(currentOwnerMid);
       try {
         Future<void>? future;
         final effectiveIsBlock = isBlockSource ?? isBlock;
@@ -144,10 +151,19 @@ mixin BlockMixin on GetxController {
               )
               .map(
                 (item) {
-                  final segmentModel = SegmentModel.fromItemModel(
+                  final rawSegmentModel = SegmentModel.fromItemModel(
                     item,
                     effectiveUseBlockConfig ? blockConfig : null,
                   );
+                  final segmentModel = isWhitelisted
+                      ? SegmentModel(
+                          uuid: rawSegmentModel.uuid,
+                          segmentType: rawSegmentModel.segmentType,
+                          segment: rawSegmentModel.segment,
+                          skipType: SkipType.showOnly,
+                          originalSkipType: rawSegmentModel.originalSkipType,
+                        )
+                      : rawSegmentModel;
                   if (segmentModel.segment == const (0, 0)) {
                     videoLabel?.value +=
                         '${videoLabel!.value.isNotEmpty ? '/' : ''}${segmentModel.segmentType.title}';
@@ -491,6 +507,17 @@ mixin BlockMixin on GetxController {
     videoLabel?.value = '';
     _segmentList.clear();
     segmentProgressList.clear();
+  }
+
+  void applyWhitelistToSegments() {
+    final currentOwnerMid = ownerMid;
+    final isWhitelisted =
+        currentOwnerMid != null &&
+        Pref.blockWhitelist.keys.contains(currentOwnerMid);
+
+    for (final segment in _segmentList) {
+      segment.applyWhitelistState(isWhitelisted);
+    }
   }
 
   Duration? getFirstSegment([int pos = 0]) {

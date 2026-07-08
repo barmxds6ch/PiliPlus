@@ -1,4 +1,6 @@
 import 'package:PiliPlus/models/common/enum_with_label.dart';
+import 'package:PiliPlus/pages/setting/widgets/list_editor_dialog.dart'
+    show ListEditorDialog;
 import 'package:PiliPlus/pages/setting/widgets/normal_item.dart';
 import 'package:PiliPlus/pages/setting/widgets/popup_item.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
@@ -134,6 +136,7 @@ class NormalModel extends SettingsModel {
   final String? title;
   final ValueGetter<String>? getTitle;
   final ValueGetter<String>? getSubtitle;
+  final TextStyle? subtitleStyle;
   final Widget Function(ThemeData theme)? getTrailing;
   final void Function(BuildContext context, VoidCallback setState)? onTap;
 
@@ -142,6 +145,7 @@ class NormalModel extends SettingsModel {
     super.leading,
     super.contentPadding,
     super.titleStyle,
+    this.subtitleStyle,
     this.title,
     this.getTitle,
     this.getSubtitle,
@@ -154,6 +158,7 @@ class NormalModel extends SettingsModel {
     super.leading,
     super.contentPadding,
     super.titleStyle,
+    this.subtitleStyle,
     this.title,
     this.getTitle,
     this.getSubtitle,
@@ -177,6 +182,7 @@ class NormalModel extends SettingsModel {
     onTap: onTap,
     contentPadding: contentPadding,
     titleStyle: titleStyle,
+    subtitleStyle: subtitleStyle,
   );
 }
 
@@ -348,9 +354,11 @@ SettingsModel getListUidWithNameModel({
   Widget? leading,
   String emptySubtitle = '点击添加',
   String Function(int count)? countSubtitleBuilder,
+  TextStyle? titleStyle,
+  TextStyle? subtitleStyle,
 }) {
   return NormalModel(
-    leading: leading ?? const Icon(Icons.person_off_outlined),
+    leading: leading,
     title: title,
     getSubtitle: () {
       final uidsMap = getUidsMap();
@@ -415,6 +423,8 @@ SettingsModel getListUidWithNameModel({
         SmartDialog.showToast('已保存');
       }
     },
+    titleStyle: titleStyle,
+    subtitleStyle: subtitleStyle,
   );
 }
 

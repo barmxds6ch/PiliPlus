@@ -11,6 +11,7 @@ class NormalItem extends StatefulWidget {
   final void Function(BuildContext context, VoidCallback setState)? onTap;
   final EdgeInsetsGeometry? contentPadding;
   final TextStyle? titleStyle;
+  final TextStyle? subtitleStyle;
 
   const NormalItem({
     this.title,
@@ -22,6 +23,7 @@ class NormalItem extends StatefulWidget {
     this.onTap,
     this.contentPadding,
     this.titleStyle,
+    this.subtitleStyle,
     super.key,
   }) : assert(title != null || getTitle != null);
 
@@ -37,9 +39,11 @@ class _NormalItemState extends State<NormalItem> {
     if ((widget.subtitle ?? widget.getSubtitle?.call()) case final text?) {
       subtitle = Text(
         text,
-        style: theme.textTheme.labelMedium!.copyWith(
-          color: theme.colorScheme.outline,
-        ),
+        style:
+            widget.subtitleStyle ??
+            theme.textTheme.labelMedium!.copyWith(
+              color: theme.colorScheme.outline,
+            ),
       );
     }
     return ListTile(

@@ -165,6 +165,21 @@ class VideoDetailController extends GetxController
   bool get removeSafeArea => plPlayerController.removeSafeArea;
   double get uiScale => plPlayerController.uiScale;
 
+  @override
+  int? get ownerMid {
+    final introController = Get.isRegistered<UgcIntroController>(tag: heroTag)
+        ? Get.find<UgcIntroController>(tag: heroTag)
+        : null;
+    return introController?.videoDetail.value.owner?.mid;
+  }
+
+  String? get ownerName {
+    final introController = Get.isRegistered<UgcIntroController>(tag: heroTag)
+        ? Get.find<UgcIntroController>(tag: heroTag)
+        : null;
+    return introController?.videoDetail.value.owner?.name;
+  }
+
   late VideoItem firstVideo;
   String? videoUrl;
   String? audioUrl;
@@ -1137,6 +1152,10 @@ class VideoDetailController extends GetxController
     if (result case Success(:final response)) {
       data = response;
       if (data.dash != null) await _supplementVideoQualities();
+
+      if (plPlayerController.enableSponsorBlock && isBlock && !fromReset) {
+        await querySponsorBlock(bvid: bvid, cid: cid.value);
+      }
 
       languages.value = data.language?.items;
       currLang.value = data.curLanguage;

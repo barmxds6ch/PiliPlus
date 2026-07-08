@@ -7,6 +7,8 @@ import 'package:PiliPlus/http/sponsor_block.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models_new/sponsor_block/user_info.dart';
+import 'package:PiliPlus/pages/setting/models/model.dart'
+    show getListUidWithNameModel;
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
 import 'package:PiliPlus/utils/accounts/account_manager/account_mgr.dart';
 import 'package:PiliPlus/utils/filtering_text.dart';
@@ -526,6 +528,21 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           dividerL,
           SliverToBoxAdapter(child: _serverStatusItem(theme, titleStyle)),
           dividerL,
+          SliverToBoxAdapter(
+            child: getListUidWithNameModel(
+              title: '跳过豁免列表',
+              emptySubtitle: '点击添加用户',
+              countSubtitleBuilder: (count) => '已加入 $count 个用户',
+              getUidsMap: () => Pref.blockWhitelist,
+              setUidsMap: (map) {
+                Pref.blockWhitelist = map;
+              },
+              onUpdate: () {},
+              titleStyle: titleStyle,
+              subtitleStyle: subTitleStyle,
+            ).widget,
+          ),
+          sliverDivider,
           SliverToBoxAdapter(
             child: _blockLimitItem(theme, titleStyle, subTitleStyle),
           ),
