@@ -15,6 +15,7 @@ class RcmdController extends CommonListController {
 
   int? lastRefreshAt;
   late bool savedRcmdTip = Pref.savedRcmdTip;
+  bool _discardSavedData = false;
 
   // 合并模式专用页码：Web端由基类 page 管理（自动 ++），App端在此自管
   int _appPage = 0;
@@ -98,7 +99,7 @@ class RcmdController extends CommonListController {
 
   @override
   void handleListResponse(List dataList) {
-    if (enableSaveLastData && _isFirstPage) {
+    if (enableSaveLastData && !_discardSavedData && _isFirstPage) {
       if (loadingState.value case Success(:final response)) {
         if (response != null && response.isNotEmpty) {
           if (savedRcmdTip) {
@@ -120,5 +121,15 @@ class RcmdController extends CommonListController {
     _appPage = 0; // 重置 App 端页码
     isEnd = false;
     return queryData();
+  }
+
+  Future<void> onRefreshAndDiscardSavedData() async {
+    _discardSavedData = true;
+    lastRefreshAt = null;
+    try {
+      await onRefresh();
+    } finally {
+      _discardSavedData = false;
+    }
   }
 }
